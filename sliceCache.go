@@ -31,7 +31,7 @@ func New(lenOfCache int) *SliceCache {
 	if lenOfCache < 1024 {
 		lenOfCache = 1024
 	}
-	s := new(sliceCache)
+	s := new(SliceCache)
 	s.lenOfCache = lenOfCache
 	s.curLenOfCache = lenOfCache
 	s.cache = make([]int, lenOfCache)
@@ -41,7 +41,7 @@ func New(lenOfCache int) *SliceCache {
 }
 
 //清空数据，如果未发生过扩容，则把相关数据置零即可，否则，需要重新初始化部分字段
-func (this *sliceCache) ClearnData() {
+func (this *SliceCache) ClearnData() {
 	if this.lenOfCache == this.curLenOfCache {
 		this.notUsedDataBegin = 0
 		this.childSliceNum = 0
@@ -55,7 +55,7 @@ func (this *sliceCache) ClearnData() {
 }
 
 //从外部添加数据，并返回一个内部编号
-func (this *sliceCache) AppendFromOutside(data ...int) (childSliceIndex ChildSliceIndex) {
+func (this *SliceCache) AppendFromOutside(data ...int) (childSliceIndex ChildSliceIndex) {
 	if len(data) == 0 {
 		panic("no cache")
 	}
@@ -72,7 +72,7 @@ func (this *sliceCache) AppendFromOutside(data ...int) (childSliceIndex ChildSli
 }
 
 //从自身添加
-func (this *sliceCache) Append(oldchildSliceIndex ChildSliceIndex, data ...int) (newchildSliceIndex ChildSliceIndex) {
+func (this *SliceCache) Append(oldchildSliceIndex ChildSliceIndex, data ...int) (newchildSliceIndex ChildSliceIndex) {
 	if len(data) == 0 {
 		panic("no cache")
 	}
@@ -107,34 +107,34 @@ func (this *sliceCache) Append(oldchildSliceIndex ChildSliceIndex, data ...int) 
 }
 
 //数据长度
-func (this *sliceCache) LenOf(childSliceIndex ChildSliceIndex) int {
+func (this *SliceCache) LenOf(childSliceIndex ChildSliceIndex) int {
 	return this.childSliceIndex[childSliceIndex].end - this.childSliceIndex[childSliceIndex].begin
 }
 
 //获取某位置的所有元素
-func (this *sliceCache) ToSlice(childSliceIndex ChildSliceIndex) (ret []int) {
+func (this *SliceCache) ToSlice(childSliceIndex ChildSliceIndex) (ret []int) {
 	ret = make([]int, this.childSliceIndex[childSliceIndex].end-this.childSliceIndex[childSliceIndex].begin)
 	copy(ret, this.cache[this.childSliceIndex[childSliceIndex].begin:this.childSliceIndex[childSliceIndex].end])
 	return
 }
 
 //获取某位置的第一个元素
-func (this *sliceCache) GetFirstElemOf(childSliceIndex ChildSliceIndex) int {
+func (this *SliceCache) GetFirstElemOf(childSliceIndex ChildSliceIndex) int {
 	return this.cache[this.childSliceIndex[childSliceIndex].begin]
 }
 
 //获取某位置的最后一个元素
-func (this *sliceCache) GetLastElemOf(childSliceIndex ChildSliceIndex) int {
+func (this *SliceCache) GetLastElemOf(childSliceIndex ChildSliceIndex) int {
 	return this.cache[this.childSliceIndex[childSliceIndex].begin+this.childSliceIndex[childSliceIndex].end-this.childSliceIndex[childSliceIndex].begin-1]
 }
 
 //未使用的数据长度
-func (this *sliceCache) notUsedDataLen() int {
+func (this *SliceCache) notUsedDataLen() int {
 	return this.curLenOfCache - this.notUsedDataBegin
 }
 
 //扩容 为简单起见直接按翻倍来处理
-func (this *sliceCache) growslice() {
+func (this *SliceCache) growslice() {
 	newChildSliceIndex := make([]index, this.curLenOfCache*2)
 	newCache := make([]int, this.curLenOfCache*2)
 	copy(newChildSliceIndex, this.childSliceIndex)
