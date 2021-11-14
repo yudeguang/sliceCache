@@ -17,7 +17,7 @@ type index struct {
 	end   int
 }
 type SliceCache struct {
-	locker           *sync.Mutex
+	Locker           *sync.Mutex
 	lenOfCache       int     //初始切片长度
 	curLenOfCache    int     //可能发生扩容后的实际缓存长度
 	notUsedDataBegin int     //data中未使用的数据开始位置
@@ -36,7 +36,7 @@ func New(lenOfCache int) *SliceCache {
 	s.curLenOfCache = lenOfCache
 	s.cache = make([]int, lenOfCache)
 	s.childSliceIndex = make([]index, lenOfCache) //注意，实际上索引的个数应该是要远低于lenOfCache，但在此，为了简单起见，暂时先浪费点空间
-	s.locker = new(sync.Mutex)
+	s.Locker = new(sync.Mutex)
 	return s
 }
 
