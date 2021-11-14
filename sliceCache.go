@@ -16,7 +16,7 @@ type index struct {
 	begin int
 	end   int
 }
-type sliceCache struct {
+type SliceCache struct {
 	locker           *sync.Mutex
 	lenOfCache       int     //初始切片长度
 	curLenOfCache    int     //可能发生扩容后的实际缓存长度
@@ -27,7 +27,7 @@ type sliceCache struct {
 }
 
 //lenOfCache指总的分配的空间长度，avgLenOfChildSlice为可先参数，需要根据实际情况设置合理的长度默认长度为10
-func New(lenOfCache int) *sliceCache {
+func New(lenOfCache int) *SliceCache {
 	if lenOfCache < 1024 {
 		lenOfCache = 1024
 	}
